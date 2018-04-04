@@ -1,0 +1,153 @@
+# This script generates the scoring and schema files necessary to operationalize the entity extraction model
+# Init and run functions
+import os
+import numpy as np
+import logging, sys, json
+import timeit as t
+from azureml.api.schema.dataTypes import DataTypes
+from azureml.api.schema.sampleDefinition import SampleDefinition
+from azureml.api.realtime.services import generate_schema
+import pandas
+
+
+import tensorflow
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
+tensorflow.device('/cpu:0')
+
+logger = logging.getLogger("stmt_logger")
+ch = logging.StreamHandler(sys.stdout)
+logger.addHandler(ch)
+
+
+# To generate the schema file, simply execute this scoring script. Make sure that you are using Azure ML Python environment.
+# Running this file creates a service-schema.json file under the current working directory that contains the schema 
+# of the web service input. It also test the scoring script before creating the web service.
+# cd C:\Users\<user-name>\AppData\Local\amlworkbench\Python\python score.py
+
+#Here is the CLI command to create a realtime scoring web service
+
+# Create realtime service
+#az ml env setup -g env4entityextractorrg -n env4entityextractor --cluster -z 5 -l eastus2
+
+# Set up AML environment and compute with ACS
+#az ml env set --cluster-name env4entityextractor --resource-group env4entityextractorrg
+
+#C:\dl4nlp\models>az ml service create realtime -n extract-biomedical-entities -f score.py -m lstm_bidirectional_model.h5 -s service-schema.json -r python -d resources.pkl -d DataReader.py -d EntityExtractor.py -c scoring_conda_dependencies.yml  
+
+#Here is the CLI command to run Kubernetes 
+#C:\Users\<user-name>\bin\kubectl.exe proxy --kubeconfig C:\Users\hacker\.kube\config
+
+# Prepare the web service definition by authoring
+# init() and run() functions. Test the functions
+# before deploying the web service.
+
+# init loads the model (global)
+def init2():
+    """ Initialise SD model
+    """
+    from keras.models import Sequential
+    from keras.models import load_model
+    import h5py
+
+    global entityExtractor
+
+    start = t.default_timer()
+    
+    
+    
+    print("home_dir = {}".format(home_dir))   
+    
+    resources_pickle_file = os.path.join(home_dir, "resources.pkl")
+    
+    if not os.path.exists(resources_pickle_file):
+        print("The model companion resources pickle file ({}) doesn't exist.".format(resources_pickle_file))    
+           
+    model_file_path = os.path.join(home_dir, 'model.h5')
+
+    if not os.path.exists(model_file_path):
+        print("The neural model file ({}) doesn't exist.".format(model_file_path))
+
+    print("Starting the model prediction ...")
+    reader = DataReader(input_resources_pickle_file = resources_pickle_file) 
+    entityExtractor = EntityExtractor(reader)
+        
+    try:
+         #load the model
+         print("Loading the entity extraction model {}".format(model_file_path))
+         entityExtractor.load(model_file_path)
+         entityExtractor.print_summary()     
+    except:
+        print("can't load the entity extraction model")
+        pass
+    end = t.default_timer()
+
+    loadTimeMsg = "Model loading time: {0} ms".format(round((end-start)*1000, 2))
+    logger.info(loadTimeMsg)
+
+def init():
+    """ Initialise SD model
+    """
+    from tatk.pipelines.entity_extraction.keras_entity_extractor import KerasEntityExtractor
+
+    global loaded_keras_entity_recognizer    
+
+    start = t.default_timer()
+
+    home_dir = os.getcwd() 
+    print("home_dir = {}".format(home_dir))
+    
+    # load the model scoring pipeline
+    pipeline_zip_file = os.path.join(home_dir, 'keras_w2v_entity_extractor.zip')
+    loaded_keras_entity_recognizer = KerasEntityExtractor.load(pipeline_zip_file)
+    print(loaded_keras_entity_recognizer)
+    end = t.default_timer()
+
+    loadTimeMsg = "Model loading time: {0} ms".format(round((end - start)*1000, 2))
+    logger.info(loadTimeMsg)
+
+# run takes an input dataframe and performs entity extraction   
+def run(input_df):
+    """ Classify the input using the loaded model
+    """
+    import json
+
+    global loaded_keras_entity_recognizer
+    start = t.default_timer()
+        
+    # Generate Predictions
+    pred = loaded_keras_entity_recognizer.predict(input_df)
+    
+    end = t.default_timer()
+
+    logger.info("Entity extraciton took {0} ms".format(round((end - start)*1000, 2)))      
+    json_str = pred.to_json()
+    return json.dumps(json_str)
+
+def main(): 
+  from azureml.api.schema.dataTypes import DataTypes
+  from azureml.api.schema.sampleDefinition import SampleDefinition
+  from azureml.api.realtime.services import generate_schema
+  import pandas
+
+  df = pandas.DataFrame(data=[['please add your text here.']], columns=['text'])
+  
+  # Turn on data collection debug mode to view output in stdout
+  os.environ["AML_MODEL_DC_DEBUG"] = 'true'
+
+  # Test the output of the functions
+  init()  
+  input1 = pandas.DataFrame(data=[['The authors report on six cases of famotidine-associated delirium in hospitalized patients who cleared completely upon removal of famotidine.']],
+                            columns=['text'])
+  
+  print("Result: " + run(input1))
+  
+  inputs = {"input_df": SampleDefinition(DataTypes.PANDAS, df)}
+  
+  #Generate the schema
+  generate_schema(run_func=run, inputs=inputs, filepath='service-schema.json')
+  print("Schema generated")
+
+
+if __name__ == "__main__":
+    main()

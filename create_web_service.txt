@@ -1,0 +1,13 @@
+# CREATE NECESSARY AZURE SERVICES, MMS AND AKS, AND SET COMPUTE TO AKS
+az ml env setup -n debrajtatkclass1 --location eastus2
+az ml env show -g debrajtatkclass1rg -n debrajtatkclass1
+az ml env set -g debrajtatkclass1rg -n debrajtatkclass1
+
+az ml account modelmanagement create --location eastus2 -n debrajtatkclass1mms -g debrajtatkclass1rg --sku-name S1
+az ml account modelmanagement set -n debrajtatkclass1mms -g debrajtatkclass1rg
+
+az ml env setup --cluster -n tatkakscluster -l eastus2 -g debrajtatkclass1rg
+az ml env set -n tatkakscluster -g debrajtatkclass1aksrg
+
+# CREATE REAL-TIME WEB SERVICE USING TATK TEXT CLASSIFICATION (SK-LEARN) PIPELINE MODEL
+az ml service create realtime -f score_sentiments.py -m sk_model.zip -s service_schema.json -n sentimentapp -r python -c aml_config\conda_dependencies.yml
