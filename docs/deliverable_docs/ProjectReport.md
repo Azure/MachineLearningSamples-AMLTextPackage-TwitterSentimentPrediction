@@ -7,6 +7,18 @@ We had previously released a [GitHub repository for the TDSP project structure a
 
 In this sample we are going to demonstrate the usage Azure Machine Learning Package for Text Analytics and TDSP to develop and deploy predictive models for Twitter sentiment classification.
 
+
+## Use case
+### Twitter sentiment polarity sample
+This article uses a sample to show you how to instantiate and execute a Machine Learning project. The sample uses the TDSP structure and templates in Azure Machine Learning Workbench. The complete sample is provided in this walkthrough. The modeling task predicts sentiment polarity (positive or negative) by using the text from tweets. This article outlines the data-modeling tasks that are described in the walkthrough. The walkthrough covers the following tasks:
+
+1. Data exploration, training, and deployment of a machine learning model that address the prediction problem that's described in the use case overview. Twitter sentiment data is used for these tasks.
+2. Execution of the project by using the TDSP template from Azure Machine Learning for this project. For project execution and reporting, the TDSP lifecycle is used.
+3. Operationalization of the solution directly from Azure Machine Learning in Azure Container Service.
+
+The project highlights the use of Text Analytics Package for Azure Machine Learning.
+
+
 ## Link to GitHub repository
 Link to the GitHub repository is [here](https://github.com/Azure/MachineLearningSamples-AMLTextPackage-TwitterSentimentPrediction). 
 

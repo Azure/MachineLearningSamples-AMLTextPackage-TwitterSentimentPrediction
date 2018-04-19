@@ -20,7 +20,7 @@ The public GitHub repository for this example contains all the code samples:
 Sentiment analysis is a widely research topic in the Natural Language Processing domain. It has the applications in consumer reviews mining, public opinion mining and advertisement on online forums. Many of the sentiment analysis approaches use handcrafted features but the popularity of unsupervised and semi supervised approached to generate word embeddings have made these embedding techniques an important way to generate features. In this sample we are going to demonstrate the usage of Word Embedding algorithm **Word2Vec** to predict sentiment polarity. Word2Vec word features are used as input into logistic regression or convolutional neural networks to produce the final sentiment classification models. This end-to-end process is implemented in [Azure Machine Learning Workbench](https://docs.microsoft.com/en-us/azure/machine-learning/preview/overview-what-is-azure-ml) using Azure Machine Learning Package for Text Analytics and Team Data Science Process (TDSP). 
 
 
-## Description
+## Objective
 
 The aim of this sample is to highlight how to use Azure Machine Learning package for Text Analytics and Team Data Science Process (TDSP) to predict the sentiment of Twitter text data. Here are the key points addressed:
 
@@ -28,7 +28,14 @@ The aim of this sample is to highlight how to use Azure Machine Learning package
 * Use Word2Vec embeddings in Logistic Model and Keras CNN classification models
 * Persist and deploy models as web service in Azure Container Services (AKS)
 
-The detailed documentation for this scenario including the step-by-step walk-through: https://review.docs.microsoft.com/en-us/azure/machine-learning/preview/scenario-tdsp-twitter-sentiment.
+## Description of project: Twitter sentiment polarity classification
+This article uses a sample to show you how to instantiate and execute a Machine Learning project. The sample uses the TDSP structure and templates in Azure Machine Learning Workbench. The complete sample is provided in this walkthrough. The modeling task predicts sentiment polarity (positive or negative) by using the text from tweets. This article outlines the data-modeling tasks that are described in the walkthrough. The walkthrough covers the following tasks:
+
+1. Data exploration, training, and deployment of a machine learning model that address the prediction problem that's described in the use case overview. Twitter sentiment data is used for these tasks.
+2. Execution of the project by using the TDSP template from Azure Machine Learning for this project. For project execution and reporting, the TDSP lifecycle is used.
+3. Operationalization of the solution directly from Azure Machine Learning in Azure Container Service.
+
+The project highlights the use of Text Analytics Package for Azure Machine Learning.
 
 For code samples, click the View Project icon on the right and visit the project GitHub repository.
 
