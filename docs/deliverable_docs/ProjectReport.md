@@ -55,7 +55,7 @@ The details of the Word2Vec algorithm and skip-gram model are beyond the scope o
 
 After the training process is done, two embedding files in the format of TSV are generated for the modeling stage.
 
-#### [Modeling](https://github.com/Azure/MachineLearningSamples-AMLTextPackage-TwitterSentimentPrediction/tree/master/code/02_modeling)
+#### Model training
 Once the word vectors have been generated using either of the SSWE or Word2vec algorithm, the next step is to train the classification models to predict actual sentiment polarity. We apply the two types of features: Word2Vec and SSWE into two models: Logistic regression and Convolutional Neural Networks (CNN). 
 
 ### [Deployment](https://github.com/Azure/MachineLearningSamples-AMLTextPackage-TwitterSentimentPrediction/tree/master/code/03_deployment)
