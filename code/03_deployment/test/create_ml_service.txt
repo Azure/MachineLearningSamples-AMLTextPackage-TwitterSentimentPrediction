@@ -1,6 +1,0 @@
-az ml account modelmanagement set --name tutorial4vienna-model-mgr -g ner-rg
-
-az ml service run realtime -i extract-biomedical-entities.tatkenv-e2b70952.eastus2 -d "{\"input_df\": [{\"text\": \"My doctor prescribed ibuprofen.\"}]}"
-
-
-az ml service create realtime -n extract-biomedical-entities -f score.py -m keras_w2v_entity_extractor.zip -s service-schema.json -r python -c conda_dependencies.yml

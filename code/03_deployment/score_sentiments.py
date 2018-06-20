@@ -22,7 +22,7 @@ def init():
     import os
 
     home_dir = os.getcwd() 
-    model_file = os.path.join(home_dir, 'sk_model.zip')
+    model_file = os.path.join(home_dir, 'sk_model.zipc')
 
     # load the model from file into a global object
     global model
