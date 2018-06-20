@@ -1,11 +1,16 @@
 # Use word embeddings to predict Twitter sentiment following Team Data Science Process & AML Package for Text Analytics
 
 
-## Link to the Microsoft DOCS site
+## Link to the Microsoft Docs site
 
 Documentation that walks you through this example is available at: 
 
 [https://docs.microsoft.com/azure/machine-learning/team-data-science-process/predict-twitter-sentiment-amltextpackage](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/predict-twitter-sentiment-amltextpackage)
+
+## Link to the project report
+
+The project report in TDSP template is here:
+[https://github.com/Azure/MachineLearningSamples-AMLTextPackage-TwitterSentimentPrediction/blob/master/docs/deliverable_docs/ProjectReport.md](https://github.com/Azure/MachineLearningSamples-AMLTextPackage-TwitterSentimentPrediction/blob/master/docs/deliverable_docs/ProjectReport.md)
 
 
 ## Link to the Gallery GitHub repository
